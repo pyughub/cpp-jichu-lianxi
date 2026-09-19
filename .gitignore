@@ -1,0 +1,10 @@
+.idea/
+.vscode/
+.clion-run/
+.DS_Store
+*.pdf
+*.o
+*.out
+*.exe
+*.dSYM/
+a.out

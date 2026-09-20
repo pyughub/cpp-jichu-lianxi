@@ -8,3 +8,23 @@
 *.exe
 *.dSYM/
 a.out
+
+# make 生成的同名可执行文件
+01_comments
+03_variable_types
+04_variable_scope
+05_constants
+06_modifier_types
+09_loops
+10_decision
+11_functions
+12_numbers
+13_arrays
+14_strings
+15_pointers
+16_references
+17_date_time
+18_basic_io
+19_struct
+20_vector
+21_data_structures

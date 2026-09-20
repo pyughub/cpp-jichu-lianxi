@@ -2,9 +2,20 @@
 
 上课自己敲的 C++ 基础语法练习。每个 `.cpp` 对应一个知识点，可以单独编译运行。
 
+macOS / Linux 用 `make`，Windows（MinGW）用 `mingw32-make`：
+
 ```bash
-c++ -std=c++17 11_functions.cpp -o functions
-./functions
+make                     # 编译全部 .cpp
+make 01_comments.cpp     # 只编译这一个
+make run 01_comments.cpp # 编译并运行
+make clean               # 删掉生成的可执行文件
+```
+
+也可以直接调用编译器：
+
+```bash
+c++ -std=c++17 -Wall 11_functions.cpp -o 11_functions
+./11_functions
 ```
 
 | 文件 | 练习内容 |

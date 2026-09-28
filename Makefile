@@ -5,7 +5,7 @@
 #   make clean               删除 bin/ 和 dsym/
 
 CXX      = c++
-CXXFLAGS = -std=c++17 -g -Wall
+CXXFLAGS = -std=c++17 -g -Wall -pthread
 SRC_DIR  = src
 BIN_DIR  = bin
 DSYM_DIR = dsym
@@ -21,7 +21,7 @@ else
     UNAME_S := $(shell uname -s)
 endif
 
-SRCS = $(wildcard $(SRC_DIR)/*.cpp)
+SRCS = $(filter-out $(SRC_DIR)/loguru.cpp,$(wildcard $(SRC_DIR)/*.cpp))
 BINS = $(patsubst $(SRC_DIR)/%.cpp,$(BIN_DIR)/%$(EXE),$(SRCS))
 
 # 命令行里的那个 .cpp（允许写成 01_comments.cpp 或 src/01_comments.cpp）
@@ -36,14 +36,14 @@ $(BIN_DIR) $(DSYM_DIR):
 	mkdir -p $@
 
 define MOVE_DSYM
-	@if [ "$(UNAME_S)" = "Darwin" ] && [ -d $@.dSYM ]; then \
-		rm -rf $(DSYM_DIR)/$(notdir $@).dSYM; \
-		mv $@.dSYM $(DSYM_DIR)/; \
+	@if [ "$(UNAME_S)" = "Darwin" ] && [ -d "$@.dSYM" ]; then \
+		rm -rf "$(DSYM_DIR)/$(notdir $@).dSYM"; \
+		mv "$@.dSYM" "$(DSYM_DIR)/"; \
 	fi
 endef
 
-$(BIN_DIR)/%$(EXE): $(SRC_DIR)/%.cpp | $(BIN_DIR) $(DSYM_DIR)
-	$(CXX) $(CXXFLAGS) -o $@ $<
+$(BIN_DIR)/%$(EXE): $(SRC_DIR)/%.cpp $(SRC_DIR)/loguru.cpp | $(BIN_DIR) $(DSYM_DIR)
+	$(CXX) $(CXXFLAGS) -o "$@" "$<" "$(SRC_DIR)/loguru.cpp"
 	$(MOVE_DSYM)
 
 ifneq ($(SRC),)

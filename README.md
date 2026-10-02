@@ -21,6 +21,15 @@ make run 01_comments.cpp # 编译并运行
 make clean               # 删掉 bin/ 和 dsym/
 ```
 
+`third_party/loguru/` 是日志库 [loguru](https://github.com/emilk/loguru)，只给阅读和单独演示用，不参与其他练习的编译。特性索引在 `docs/loguru-cpp-features.md`。
+
+```bash
+make 26_loguru_demo.cpp
+make run 26_loguru_demo.cpp
+```
+
+`LOG_F(FATAL, ...)` 会在打印后中止进程，演示程序里没有调用它。
+
 | 文件 | 练习内容 |
 | --- | --- |
 | `src/01_comments.cpp` | 注释 |

@@ -5,10 +5,13 @@
 #   make clean               删除 bin/ 和 dsym/
 
 CXX      = c++
-CXXFLAGS = -std=c++17 -g -Wall -pthread
+CXXFLAGS = -std=c++17 -g -Wall
 SRC_DIR  = src
 BIN_DIR  = bin
 DSYM_DIR = dsym
+LOGURU_DIR  = third_party/loguru
+LOGURU_SRC  = $(LOGURU_DIR)/loguru.cpp
+LOGURU_DEMO = 26_loguru_demo
 
 # Windows 生成 foo.exe；macOS / Linux 生成不带后缀的 foo
 ifeq ($(OS),Windows_NT)
@@ -21,8 +24,9 @@ else
     UNAME_S := $(shell uname -s)
 endif
 
-SRCS = $(filter-out $(SRC_DIR)/loguru.cpp,$(wildcard $(SRC_DIR)/*.cpp))
-BINS = $(patsubst $(SRC_DIR)/%.cpp,$(BIN_DIR)/%$(EXE),$(SRCS))
+SRCS = $(filter-out $(SRC_DIR)/$(LOGURU_DEMO).cpp,$(wildcard $(SRC_DIR)/*.cpp))
+BINS = $(patsubst $(SRC_DIR)/%.cpp,$(BIN_DIR)/%$(EXE),$(SRCS)) \
+       $(BIN_DIR)/$(LOGURU_DEMO)$(EXE)
 
 # 命令行里的那个 .cpp（允许写成 01_comments.cpp 或 src/01_comments.cpp）
 SRC = $(notdir $(filter %.cpp,$(MAKECMDGOALS)))
@@ -42,8 +46,12 @@ define MOVE_DSYM
 	fi
 endef
 
-$(BIN_DIR)/%$(EXE): $(SRC_DIR)/%.cpp $(SRC_DIR)/loguru.cpp | $(BIN_DIR) $(DSYM_DIR)
-	$(CXX) $(CXXFLAGS) -o "$@" "$<" "$(SRC_DIR)/loguru.cpp"
+$(BIN_DIR)/%$(EXE): $(SRC_DIR)/%.cpp | $(BIN_DIR) $(DSYM_DIR)
+	$(CXX) $(CXXFLAGS) -o $@ $<
+	$(MOVE_DSYM)
+
+$(BIN_DIR)/$(LOGURU_DEMO)$(EXE): $(SRC_DIR)/$(LOGURU_DEMO).cpp $(LOGURU_SRC) | $(BIN_DIR) $(DSYM_DIR)
+	$(CXX) $(CXXFLAGS) -pthread -I $(LOGURU_DIR) -o "$@" "$<" "$(LOGURU_SRC)"
 	$(MOVE_DSYM)
 
 ifneq ($(SRC),)
